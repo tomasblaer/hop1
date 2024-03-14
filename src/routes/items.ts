@@ -9,7 +9,7 @@ import {
 import { Prisma, item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
 
-export async function listItems(
+export async function listItemsInSale(
   req: Request,
   res: Response,
   next: NextFunction
