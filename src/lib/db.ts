@@ -79,12 +79,12 @@ export async function getItemsInCompany(companyId: number): Promise<item[] | nul
   return items ?? null;
 }
 
-export async function createItem(data: Prisma.itemCreateInput): Promise<item | null> {
+export async function insertItem(data: Prisma.itemUncheckedCreateInput): Promise<item | null> {
   const item = await prisma.item.create({ data });
   return item ?? null;
 };
 
-export async function updateItem(id: string, data: Prisma.itemUpdateInput): Promise<item | null> {
+export async function updateItem(id: string, data: Prisma.itemUncheckedUpdateInput): Promise<item | null> {
   const item = await prisma.item.update({
     where: { id: id },
     data
