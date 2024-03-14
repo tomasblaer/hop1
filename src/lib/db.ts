@@ -116,7 +116,7 @@ export async function getCompanyIdOfUser(id: number): Promise<number | null> {
   return companyId;
 }
 
-export async function createUser(data: Prisma.userCreateInput): Promise<user | null> {
+export async function insertUser(data: Prisma.userUncheckedCreateInput): Promise<user | null> {
   const user = await prisma.user.create({ data });
   return user ?? null;
 };
