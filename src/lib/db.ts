@@ -14,7 +14,7 @@ export async function getCompany(id: number): Promise<company | null> {
   return company ?? null;
 }
 
-export async function createCompany(data: Prisma.companyCreateInput): Promise<company | null> {
+export async function insertCompany(data: Prisma.companyCreateInput): Promise<company | null> {
   const company = await prisma.company.create({ data });
   return company ?? null;
 };
