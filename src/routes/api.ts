@@ -1,15 +1,54 @@
-import express from 'express';
+import express, { Request, Response } from "express";
+import {
+  listItemsInSale,
+  listItemsInCompany,
+  createItem,
+  updateItemHandler,
+  deleteItemHandler,
+} from "./items.js";
+import { 
+  listCompanyById,
+  createCompany,
+  updateCompanyById,
+  deleteCompanyById,
+} from "./companies.js";
 import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { getSecretAssert } from '../lib/authorization.js';
 import { user } from '@prisma/client';
 
+
+
 export const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'WIP' });
-});
+export async function index(req: Request, res: Response) {
+  return res.json([
+    {
+      href: "/company",
+      methods: ["POST"],
+    },
+    {
+      href: "/company/:id",
+      methods: ["GET", "PATCH", "DELETE"],
+    },
+    {
+      href: "/item",
+      methods: ["POST"],
+    },
+    {
+      href: "/items/sale/:saleId",
+      methods: ["GET"],
+    },
+    {
+      href: "/items/:companyId",
+      methods: ["GET", "PATCH", "DELETE"],
+    },
+  ]);
+}
+
+router.get("/", index);
+
 
 /* Auth */
 router.post('/login', async (req, res) => {
@@ -37,3 +76,17 @@ router.post('/login', async (req, res) => {
 
 /* Users */
 router.post('/user', createUser);
+
+/* Company routes */
+
+router.get("/company/:id", listCompanyById);
+router.post("/company", createCompany);
+router.patch("/company/:id", updateCompanyById);
+router.delete("/company/:id", deleteCompanyById);
+
+/* Item routes */
+router.get("/items/sale/:saleId", listItemsInSale);
+router.get("/items/:companyId", listItemsInCompany);
+router.post("/item", createItem);
+router.patch("/item/:id", updateItemHandler);
+router.delete("/item/:id", deleteItemHandler);
