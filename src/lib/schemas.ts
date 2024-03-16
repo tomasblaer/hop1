@@ -168,3 +168,43 @@ export const updateCompanySchema: Schema = {
   },
 };
 
+export const createUserSchema: Schema = {
+  username: {
+    in: ["body"],
+    optional: true,
+    isLength: {
+      options: { min: 1, max: 255 },
+      errorMessage: "username cannot be empty / longer than 255 characters",
+    },
+    escape: true,
+  },
+  email: {
+    in: ["body"],
+    optional: true,
+    isLength: {
+      options: { min: 0, max: 255 },
+      errorMessage: "email cannot be empty / longer than 255 characters",
+      bail: true,
+    },
+    isEmail: {
+      errorMessage: "Invalid email address format",
+    },
+    notEmpty: true,
+    escape: true,
+  },
+  companyId: {
+    in: ["body"],
+    isInt: {
+      errorMessage: "companyId (number) is required",
+    }
+  },
+  password: {
+    in: ["body"],
+    isLength: {
+      options: { min: 3 },
+      errorMessage: "Password is required",
+      bail: true,
+    },
+  },
+};
+

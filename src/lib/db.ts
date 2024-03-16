@@ -84,7 +84,7 @@ export async function insertItem(data: Prisma.itemUncheckedCreateInput): Promise
   return item ?? null;
 };
 
-export async function updateItem(id: string, data: Prisma.itemUncheckedUpdateInput): Promise<item | null> {
+export async function updateItem(id: number, data: Prisma.itemUncheckedUpdateInput): Promise<item | null> {
   const item = await prisma.item.update({
     where: { id: id },
     data
@@ -92,7 +92,7 @@ export async function updateItem(id: string, data: Prisma.itemUncheckedUpdateInp
   return item ?? null;
 };
 
-export async function deleteItem(id: string): Promise<item | null> {
+export async function deleteItem(id: number): Promise<item | null> {
   const item = await prisma.item.delete({
     where: { id: id }
   });
@@ -101,9 +101,9 @@ export async function deleteItem(id: string): Promise<item | null> {
 
 /* Users */
 
-export async function getUser(id: number): Promise<user | null> {
+export async function getUser(username: string): Promise<user | null> {
   const user = await prisma.user.findUnique({
-    where: { id: id }
+    where: { username: username }
   });
   return user ?? null;
 }
@@ -116,7 +116,7 @@ export async function getCompanyIdOfUser(id: number): Promise<number | null> {
   return companyId;
 }
 
-export async function createUser(data: Prisma.userCreateInput): Promise<user | null> {
+export async function insertUser(data: Prisma.userUncheckedCreateInput): Promise<user | null> {
   const user = await prisma.user.create({ data });
   return user ?? null;
 };

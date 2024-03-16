@@ -39,20 +39,16 @@ export async function listItemsInCompany(
   return res.json(item);
 }
 
-export async function createItem(
+export async function createItemHandler(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const { name, price, amount, companyId, saleId } = req.body;
-
-  if (!name || !price || !amount || !companyId || !saleId) {
-    return next(new Error("Bad Request:Missing required fields, name, price, amount, companyId, saleId"));
-  }
+  const { name, price, amount, companyId, saleId, itemTypeId } = req.body;
 
   let itemCreated: item | null = null;
   try {
-    itemCreated = await insertItem({ name, price, amount, companyId, saleId });
+    itemCreated = await insertItem({ itemTypeId, companyId, saleId });
   } catch (err) {
     return next(err);
   }
@@ -65,16 +61,12 @@ export async function updateItemHandler(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
-  const { name, price, amount, companyId, saleId } = req.body;
-
-  if (!name && !price && !amount && !companyId && !saleId) {
-    return next(new Error("Bad Request: No fields to update, need at least one of name, price, amount, companyId, saleId"));
-  }
+  const id = parseInt(req.params.id);
+  const { companyId, saleId, itemTypeId } = req.body;
 
   let itemUpdated: item | null = null;
   try {
-    itemUpdated = await updateItem(id, { name, price, amount, companyId, saleId });
+    itemUpdated = await updateItem(id, { itemTypeId, companyId, saleId });
   } catch (err) {
     return next(err);
   }
@@ -87,7 +79,7 @@ export async function deleteItemHandler(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   let itemDeleted: item | null = null;
   try {
@@ -101,5 +93,5 @@ export async function deleteItemHandler(
 
 /* Exports with middleware */
 
-export const createItemMiddleware = [validateItem, createItem].flat();
+export const createItemMiddleware = [validateItem, createItemHandler].flat();
 export const updateItemMiddleware = [validateItem, updateItemHandler].flat();
