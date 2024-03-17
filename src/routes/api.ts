@@ -15,7 +15,7 @@ import {
 import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { authenticateJWT, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { authenticateJWT, ensureCompany, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
 
 
 
