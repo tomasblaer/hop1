@@ -207,3 +207,64 @@ export const createUserSchema: Schema = {
   },
 };
 
+
+
+export const createItemTypeSchema: Schema = {
+  name: {
+    in: ["body"],
+    optional: false,
+    isLength: {
+      options: { min: 1 },
+      errorMessage: "Name is required",
+      bail: true,
+    },
+    isString: {
+      errorMessage: "Name must be a string",
+      bail: true,
+    },
+    escape: true,
+  },
+  price: {
+    in: ["body"],
+    isInt: {
+      errorMessage: "Price (number) is required",
+      bail: true,
+    },
+  },
+  companyId: {
+    in: ["body"],
+    isInt: {
+      errorMessage: "companyId (number) is required",
+    }
+  }
+};
+
+export const updateItemTypeSchema: Schema = {
+  name: {
+    in: ["body"],
+    optional: false,
+    isLength: {
+      options: { min: 1 },
+      errorMessage: "Name is required",
+      bail: true,
+    },
+    isString: {
+      errorMessage: "Name must be a string",
+      bail: true,
+    },
+    escape: true,
+  },
+  price: {
+    in: ["body"],
+    isInt: {
+      errorMessage: "Price (number) is required",
+      bail: true,
+    },
+  },
+  companyId: {
+    in: ["body"],
+    isInt: {
+      errorMessage: "companyId (number) is required",
+    }
+  }
+};
