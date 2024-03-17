@@ -50,7 +50,7 @@ export async function getSale(id: string): Promise<sale | null> {
   return sale ?? null;
 }
 
-export async function createSale(data: Prisma.saleCreateInput): Promise<sale | null> {
+export async function createSale(data: Prisma.saleUncheckedCreateInput): Promise<sale | null> {
   const sale = prisma.sale.create({ data });
   return sale ?? null;
 };
