@@ -4,8 +4,8 @@ import {
   insertCompany,
   updateCompany,
   deleteCompany,
-} from "../lib/db";
-import { Prisma, company } from "@prisma/client";
+} from "../lib/db.js";
+import { company } from "@prisma/client";
 import { validateCompany } from "../lib/validation.js";
 
 export async function listCompanyById(

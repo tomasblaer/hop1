@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
+import passport from "passport";
 import {
   listItemsInSale,
   listItemsInCompany,
-  createItem,
   updateItemHandler,
   deleteItemHandler,
 } from "./items.js";
@@ -15,8 +15,8 @@ import {
 import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { getSecretAssert } from '../lib/authorization.js';
-import { user } from '@prisma/client';
+import { authenticateJWT, ensureCompany, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+
 
 
 
@@ -51,31 +51,40 @@ router.get("/", index);
 
 
 /* Auth */
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  if (username && password) {
-    let user: user | null = null;
-    try {
-      user = await getUserByUsername(username);
-    } catch (e) {
-      res.status(500).json({ message: 'Internal server error' });
+router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      res.status(400).json({ message: 'Username and password required' });
+      return;
     }
-    if (!user) {
+
+    const preEx = await getUserByUsername(username);
+
+    if (!preEx) {
       res.status(401).json({ message: 'Invalid username or password' });
       return;
     }
-    const valid = await bcrypt.compare(password, user?.password)
+    const valid = await bcrypt.compare(password, preEx.password)
     if (valid) {
-      const token = jwt.sign({ sub: username }, getSecretAssert());
+      const token = jwt.sign({
+        username: preEx.username,
+        companyId: preEx.companyId,
+        admin: preEx.isCompanyAdmin
+      }, getSecretAssert());
       res.json({ token });
+    } else {
+      res.status(401).json({ message: 'Invalid username or password' });
     }
-  } else {
-    res.status(400).json({ message: 'Username and password required' });
+  } catch (e) {
+    next(e);
   }
 });
 
 /* Users */
-router.post('/user', createUser);
+router.post('/register', createUser); // Finna ut ur auth leið með þetta
+router.post('initialRegister', )// Todo
 
 /* Company routes */
 
@@ -85,8 +94,13 @@ router.patch("/company/:id", updateCompanyById);
 router.delete("/company/:id", deleteCompanyById);
 
 /* Item routes */
-router.get("/items/sale/:saleId", listItemsInSale);
-router.get("/items/:companyId", listItemsInCompany);
-router.post("/item", createItem);
-router.patch("/item/:id", updateItemHandler);
-router.delete("/item/:id", deleteItemHandler);
+router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
+router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompany);
+
+// router.post("/itemType", createItemType);
+// router.patch("/itemType/:id", updateItemType);
+// router.delete("/itemType/:id", deleteItemType);
+
+// router.post("/item/:typeId", addItem);
+// router.patch("/item/:id", editItem);
+// router.delete("/item/:id", removeItem);

@@ -1,5 +1,7 @@
+import { NextFunction, Request, Response } from "express";
+import passport from "passport";
+import { getSale } from "./db.js";
 import { user } from "@prisma/client";
-import jwt from "jsonwebtoken";
 
 export function getSecretAssert(): string {
   let secret = process.env.SECRET;
@@ -10,14 +12,28 @@ export function getSecretAssert(): string {
   return secret;
 }
 
-export function loginHandler(req: any, res: any) {
-  const { email, password } = req.body;
-  if (email && password) {
-    let user: user | null = null;
-    
-    const token = jwt.sign({ sub: email }, getSecretAssert());
-    res.json({ token });
-  } else {
-    res.status(401).json({ message: "Invalid email or password" });
+export const authenticateJWT = passport.authenticate("jwt", { session: false });
+
+export function ensureCompany(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as user;
+  console.log('user',user);
+  if (user.companyId !== parseInt(req.params.companyId)) {
+    return res.status(401).json({ message: "Unauthorized, companyId does not match" });
   }
+  next();
+}
+
+export async function ensureSaleId(req: Request, res: Response, next: NextFunction) {
+
+  const user = req.user as user;
+  const sale = await getSale(req.params.saleId);
+
+  if (!sale) {
+    return res.status(404).json({ message: "Sale not found" });
+  }
+  // If sale does not belong to user company
+  if (sale.companyId !== user.companyId) {
+    return res.status(401).json({ message: "Unauthorized, companyId does not match" });
+  }
+  next();
 }
