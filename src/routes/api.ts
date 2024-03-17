@@ -12,12 +12,23 @@ import {
   updateCompanyById,
   deleteCompanyById,
 } from "./companies.js";
-import { createUser, getUserByUsername } from './users.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { createUser, getUserByUsername } from "./users.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import {
+  authenticateJWT,
+  ensureAdmin,
+  ensureCompany,
+  ensureItemTypeId,
+  ensureSaleId,
+  getSecretAssert,
+} from "../lib/authorization.js";
 import { upload } from "../lib/multer.js";
-import { getItemTypeImage, getUserImage, uploadImageHandler } from "./images.js";
+import {
+  getUserImage,
+  uploadItemTypeImageHandler,
+  uploadUserImageHandler,
+} from "./images.js";
 
 export const router = express.Router();
 
@@ -97,8 +108,6 @@ router.post("/company", createCompany);
 router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
-
-
 /* Item type routes */
 // router.post("/itemType", createItemType);
 // router.patch("/itemType/:id", updateItemType);
@@ -123,8 +132,18 @@ router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
 router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
 
 /* Images */
-router.post('/user/upload', authenticateJWT, upload.single('image'), uploadImageHandler);
+router.post(
+  "/user/upload",
+  authenticateJWT,
+  upload.single("image"),
+  uploadUserImageHandler
+);
 
-router.get('/item/image/:itemTypeId', authenticateJWT, ensureItemTypeId, getItemTypeImage);
+router.get(
+  "/item/image/:itemTypeId",
+  authenticateJWT,
+  ensureItemTypeId,
+  uploadItemTypeImageHandler
+);
 
-router.get('/user/image', authenticateJWT, getUserImage);
+router.get("/user/image", authenticateJWT, getUserImage);
