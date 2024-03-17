@@ -79,7 +79,25 @@ export async function getItemTypes(companyId: number): Promise<item_type[] | nul
   return itemTypes ?? null;
 }
 
+export async function insertItemType(data: Prisma.item_typeUncheckedCreateInput): Promise<item_type | null> {
+  const itemType = await prisma.item_type.create({ data });
+  return itemType ?? null;
+}
 
+export async function updateItemType(id: string, data: Prisma.item_typeUncheckedUpdateInput): Promise<item_type | null> {
+  const itemType = await prisma.item_type.update({
+    where: { id: id },
+    data
+  });
+  return itemType ?? null;
+}
+
+export async function deleteItemType(id: string): Promise<item_type | null> {
+  const itemType = await prisma.item_type.delete({
+    where: { id: id }
+  });
+  return itemType ?? null;
+}
 
 /* Items */
 
