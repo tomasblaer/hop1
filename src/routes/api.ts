@@ -103,12 +103,15 @@ router.post("/company", createCompany);
 router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
+
+
 /* Item type routes */
 // router.post("/itemType", createItemType);
 // router.patch("/itemType/:id", updateItemType);
 // router.delete("/itemType/:id", deleteItemType);
 
 /* Item routes */
+
 router.get(
   "/items/sale/:saleId",
   authenticateJWT,

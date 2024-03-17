@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { checkSchema, validationResult } from "express-validator";
-import { createCompanySchema, createItemSchema, createUserSchema, updateCompanySchema, updateItemSchema } from "./schemas.js";
+import { createCompanySchema, createItemSchema, createItemTypeSchema, createUserSchema, updateCompanySchema, updateItemSchema, updateItemTypeSchema } from "./schemas.js";
 
 export async function validateUser(
   req: Request,
@@ -60,6 +60,32 @@ export async function validateCompany(
     await checkSchema(createCompanySchema).run(req);
   } else if (reqType === "PATCH") {
     await checkSchema(updateCompanySchema).run(req);
+  }
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const err = errors.array().reduce((acc, cur, index) => {
+      acc[index] = cur.msg;
+      return acc;
+    }, {} as Array<string>);
+    return res.status(400).json({ errors: err });
+  }
+
+  next();
+}
+
+
+export async function validateItemType(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response> {
+  const reqType = req.method;
+  if (reqType === "POST") {
+    await checkSchema(createItemTypeSchema).run(req);
+  } else if (reqType === "PATCH") {
+    await checkSchema(updateItemTypeSchema).run(req);
   }
 
   const errors = validationResult(req);

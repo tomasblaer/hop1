@@ -15,6 +15,7 @@ export async function addItem(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
+
   const { itemTypeId, comment, location } = req.body;
   const companyId = getCompanyId(req);
 
@@ -88,8 +89,10 @@ export async function listItemsInCompany(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
+
   const companyId = getCompanyId(req);
   const item = await getItemsInCompany(companyId);
+
 
   if (!item) {
     return next(new Error("No items found"));
