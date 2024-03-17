@@ -2,12 +2,14 @@ import { NextFunction, Response, Request } from "express";
 import { Prisma, item_type } from "@prisma/client";
 import {
   deleteItemType,
+  getCompany,
   getItemType,
   getItemTypes,
   insertItemType,
   updateItemType
  } from "../lib/db";
 import { validateItemType } from "../lib/validation";
+import { getCompanyId } from "../lib/util";
 
 export async function getItemTypeById(
   req: Request,
@@ -30,7 +32,7 @@ export async function getItemTypesByCId(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const companyId = req.body.companyId;
+  const companyId = getCompanyId(req);
   const itemTypes = getItemTypes(companyId);
 
   if (!itemTypes) {
@@ -45,7 +47,8 @@ export async function createItemType(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const { name, price, companyId } = req.body;
+  const { name, price, } = req.body;
+  const companyId = getCompanyId(req);
 
   if (!name || !price || !companyId) {
     return next(new Error("Bad Request:Missing required fields"));
@@ -67,7 +70,8 @@ export async function updateItemTypeById(
   next: NextFunction
 ): Promise<void | Response> {
   const id = req.params.id;
-  const { name, price, companyId } = req.body;
+  const { name, price } = req.body;
+  const companyId = getCompanyId(req);
 
   if (!name || !price || !companyId) {
     return next(new Error("Bad Request:Missing required fields"));
