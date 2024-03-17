@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { getSale } from "./db.js";
-import { getItemType } from "./db.js";
-import { user } from "@prisma/client";
+import { getSale, getItemType } from "./db.js";
+import { company, user } from "@prisma/client";
 import { ResolutionMode } from "typescript";
 
 export function getSecretAssert(): string {
@@ -56,6 +55,15 @@ export async function ensureItemTypeId(req: Request, res: Response, next: NextFu
   }
   // If sale does not belong to user company
   if (itemType.companyId !== user.companyId) {
+    return res.status(401).json({ message: "Unauthorized, companyId does not match" });
+  }
+  next();
+}
+
+export function ensureItemType(req: Request, res: Response, next: NextFunction) {
+  const company = req.body.company as company;
+
+  if (company.id !== parseInt(req.params.companyId)) {
     return res.status(401).json({ message: "Unauthorized, companyId does not match" });
   }
   next();

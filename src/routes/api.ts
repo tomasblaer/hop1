@@ -109,9 +109,11 @@ router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
 /* Item type routes */
-// router.post("/itemType", createItemType);
-// router.patch("/itemType/:id", updateItemType);
-// router.delete("/itemType/:id", deleteItemType);
+router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemType, getItemTypeById);
+router.get("/itemType/:companyId", authenticateJWT, ensureCompany, getItemTypesByCId);
+router.post("/itemType", authenticateJWT, createItemType);
+router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemType, updateItemTypeById);
+router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemType, deleteItemTypeById);
 
 /* Item routes */
 
