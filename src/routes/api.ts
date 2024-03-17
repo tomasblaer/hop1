@@ -35,7 +35,7 @@ export async function index(req: Request, res: Response) {
     },
     {
       href: "/item",
-      methods: ["POST"],
+      methods: ["POST", "PATCH", "DELETE"],
     },
     {
       href: "/items/sale/:saleId",
@@ -43,7 +43,7 @@ export async function index(req: Request, res: Response) {
     },
     {
       href: "/items/:companyId",
-      methods: ["GET", "PATCH", "DELETE"],
+      methods: ["GET"],
     },
   ]);
 }
