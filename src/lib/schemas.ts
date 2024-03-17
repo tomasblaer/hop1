@@ -261,10 +261,4 @@ export const updateItemTypeSchema: Schema = {
       bail: true,
     },
   },
-  companyId: {
-    in: ["body"],
-    isInt: {
-      errorMessage: "companyId (number) is required",
-    }
-  }
 };

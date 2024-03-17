@@ -16,7 +16,7 @@ export async function getItemTypeById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = req.params.itemTypeId;
   const itemType = getItemType(id);
 
   if (!itemType) {
@@ -51,10 +51,6 @@ export async function createItemType(
   const { name, price, } = req.body;
   const companyId = getCompanyId(req);
 
-  if (!name || !price || !companyId) {
-    return next(new Error("Bad Request:Missing required fields"));
-  }
-
   let newItemType: item_type | null = null;
   try {
     newItemType = await insertItemType({ name, price, companyId });
@@ -70,17 +66,12 @@ export async function updateItemTypeById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = req.params.itemTypeId;
   const { name, price } = req.body;
-  const companyId = getCompanyId(req);
-
-  if (!name || !price || !companyId) {
-    return next(new Error("Bad Request:Missing required fields"));
-  }
 
   let itemTypeUpdated: item_type | null = null;
   try {
-    itemTypeUpdated = await updateItemType(id, { name, price, companyId });
+    itemTypeUpdated = await updateItemType(id, { name, price });
   } catch (err) {
     return next(err);
   }
@@ -93,7 +84,7 @@ export async function deleteItemTypeById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = req.params.itemTypeId;
   const itemType = deleteItemType(id);
 
   if (!itemType) {
