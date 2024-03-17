@@ -5,7 +5,7 @@ import { Strategy as JwtStrategy } from "passport-jwt";
 import { router } from "./routes/api.js";
 import { handle404, handleError } from "./lib/handlers.js";
 import passport, { DoneCallback } from "passport";
-import { getSecretAssert } from "./lib/authorization.js";
+import { authenticateJWT, getSecretAssert } from "./lib/authorization.js";
 import { getUserByUsername } from "./routes/users.js";
 import { user } from "@prisma/client";
 import { JWTUser } from "./routes/types.js";
@@ -23,7 +23,7 @@ const jwtOptions = {
   secretOrKey: getSecretAssert(),
 };
 
-passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: user, done: DoneCallback) => {
+passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: JWTUser, done: DoneCallback) => {
   console.log('jwt_payload', jwt_payload);
   let user: user | null = null
   try {
@@ -37,6 +37,8 @@ passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: user, done: DoneCa
     return done(null, false);
   }
 }));
+
+app.use(authenticateJWT);
 
 const port = process.env.PORT || 3000;
 
