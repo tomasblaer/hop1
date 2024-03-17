@@ -8,7 +8,7 @@ import passport, { DoneCallback } from "passport";
 import { authenticateJWT, getSecretAssert } from "./lib/authorization.js";
 import { getUserByUsername } from "./routes/users.js";
 import { user } from "@prisma/client";
-import { JWTUser } from "./routes/types.js";
+import { JWTUser } from "./lib/types.js";
 
 const app = express();
 

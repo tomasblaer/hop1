@@ -6,7 +6,7 @@ import {
   editItem,
   removeItem,
 } from "./items.js";
-import { 
+import {
   listCompanyById,
   createCompany,
   updateCompanyById,
@@ -18,9 +18,6 @@ import bcrypt from 'bcrypt';
 import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
 import { upload } from "../lib/multer.js";
 import { getItemTypeImage, getUserImage, uploadImageHandler } from "./images.js";
-
-
-
 
 export const router = express.Router();
 
@@ -51,42 +48,47 @@ export async function index(req: Request, res: Response) {
 
 router.get("/", index);
 
-
 /* Auth */
-router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { username, password } = req.body;
+router.post(
+  "/login",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { username, password } = req.body;
 
-    if (!username || !password) {
-      res.status(400).json({ message: 'Username and password required' });
-      return;
-    }
+      if (!username || !password) {
+        res.status(400).json({ message: "Username and password required" });
+        return;
+      }
 
-    const preEx = await getUserByUsername(username);
+      const preEx = await getUserByUsername(username);
 
-    if (!preEx) {
-      res.status(401).json({ message: 'Invalid username or password' });
-      return;
+      if (!preEx) {
+        res.status(401).json({ message: "Invalid username or password" });
+        return;
+      }
+      const valid = await bcrypt.compare(password, preEx.password);
+      if (valid) {
+        const token = jwt.sign(
+          {
+            username: preEx.username,
+            companyId: preEx.companyId,
+            admin: preEx.isCompanyAdmin,
+          },
+          getSecretAssert()
+        );
+        res.json({ token });
+      } else {
+        res.status(401).json({ message: "Invalid username or password" });
+      }
+    } catch (e) {
+      next(e);
     }
-    const valid = await bcrypt.compare(password, preEx.password)
-    if (valid) {
-      const token = jwt.sign({
-        username: preEx.username,
-        companyId: preEx.companyId,
-        admin: preEx.isCompanyAdmin
-      }, getSecretAssert());
-      res.json({ token });
-    } else {
-      res.status(401).json({ message: 'Invalid username or password' });
-    }
-  } catch (e) {
-    next(e);
   }
-});
+);
 
 /* Users */
-router.post('/register', createUser); // Finna ut ur auth leið með þetta
-router.post('initialRegister', )// Todo
+router.post("/register", createUser); // Finna ut ur auth leið með þetta
+router.post("initialRegister"); // Todo
 
 /* Company routes */
 
@@ -96,14 +98,26 @@ router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
 
+
 /* Item type routes */
 // router.post("/itemType", createItemType);
 // router.patch("/itemType/:id", updateItemType);
 // router.delete("/itemType/:id", deleteItemType);
 
 /* Item routes */
-router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
-router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompany);
+
+router.get(
+  "/items/sale/:saleId",
+  authenticateJWT,
+  ensureSaleId,
+  listItemsInSale
+);
+router.get(
+  "/items/:companyId",
+  authenticateJWT,
+  ensureCompany,
+  listItemsInCompany
+);
 router.post("/item", authenticateJWT, ensureItemTypeId, addItem);
 router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
 router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
