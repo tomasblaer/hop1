@@ -1,24 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import { getImage, uploadImage } from "../lib/cloudinary";
 import { getItemType, getUser } from "../lib/db";
+import { user } from "@prisma/client";
 
 export async function getUserImage(req: Request, res: Response, next: NextFunction) {
   const id = req.params.id;
   if (!id) {
     return next(new Error("Bad Request:Missing required fields, id"));
   }
-  // const user = getUser(req);
+  const user = req.user as user;
 
-  // if (!user) {
-  //   return next(new Error("No user found"));
-  // }
+  if (!user) {
+    return next(new Error("No user found"));
+  }
 
-  // if (!user.imageId) {
-  //   return next(new Error("No image found"));
-  // }
+  if (!user.imageId) {
+    return next(new Error("No image found"));
+  }
 
-  // const image = await getImage(user.imageId);
-  // res.json(image);
+  const image = getImage(user.imageId);
+  res.json(image);
 }
 
 export async function getItemTypeImage(req: Request, res: Response, next: NextFunction) {
