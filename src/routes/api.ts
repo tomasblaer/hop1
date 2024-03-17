@@ -15,7 +15,7 @@ import {
 import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { authenticateJWT, ensureCompany, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { authenticateJWT, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
 
 
 
@@ -101,6 +101,6 @@ router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompa
 // router.patch("/itemType/:id", updateItemType);
 // router.delete("/itemType/:id", deleteItemType);
 
-// router.post("/item/:typeId", addItem);
+// router.post("/item/:typeId", authenticateJWT, ensureItemTypeId, addItem);
 // router.patch("/item/:id", editItem);
 // router.delete("/item/:id", removeItem);

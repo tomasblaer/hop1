@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import { getSale } from "./db.js";
 import { user } from "@prisma/client";
+import { ResolutionMode } from "typescript";
 
 export function getSecretAssert(): string {
   let secret = process.env.SECRET;
@@ -37,3 +38,17 @@ export async function ensureSaleId(req: Request, res: Response, next: NextFuncti
   }
   next();
 }
+
+// export async function ensureItemTypeId(req: Request, res: Response, next: NextFunction) {
+//   const user = req.user as user;
+//   const itemType = await getItemType(req.params.itemTypeId);
+
+//   if (!itemType) {
+//     return res.status(404).json({ message: "Sale not found" });
+//   }
+//   // If sale does not belong to user company
+//   if (itemType.companyId !== user.companyId) {
+//     return res.status(401).json({ message: "Unauthorized, companyId does not match" });
+//   }
+//   next();
+// }

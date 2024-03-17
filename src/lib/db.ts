@@ -72,6 +72,13 @@ export async function deleteSale(id: string): Promise<sale | null> {
 
 /* Item Types */
 
+export async function getItemType(id: string): Promise<item_type | null> {
+  const itemType = await prisma.item_type.findUnique({
+    where: { id: id }
+  });
+  return itemType ?? null;
+}
+
 export async function getItemTypes(companyId: number): Promise<item_type[] | null> {
   const itemTypes = await prisma.item_type.findMany({
     where: { companyId: companyId }
