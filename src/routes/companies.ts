@@ -4,7 +4,7 @@ import {
   insertCompany,
   updateCompany,
   deleteCompany,
-} from "../lib/db";
+} from "../lib/db.js";
 import { Prisma, company } from "@prisma/client";
 import { validateCompany } from "../lib/validation.js";
 

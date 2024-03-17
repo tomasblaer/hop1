@@ -43,6 +43,13 @@ export async function getSales(companyId: number): Promise<sale[] | null> {
   return sales ?? null;
 }
 
+export async function getSale(id: string): Promise<sale | null> {
+  const sale = await prisma.sale.findUnique({
+    where: { id: id }
+  });
+  return sale ?? null;
+}
+
 export async function createSale(data: Prisma.saleCreateInput): Promise<sale | null> {
   const sale = prisma.sale.create({ data });
   return sale ?? null;
@@ -63,7 +70,25 @@ export async function deleteSale(id: string): Promise<sale | null> {
   return sale ?? null;
 };
 
+/* Item Types */
+
+export async function getItemTypes(companyId: number): Promise<item[] | null> {
+  const items = await prisma.item.findMany({
+    where: { companyId: companyId }
+  });
+  return items ?? null;
+}
+
+
+
 /* Items */
+
+export async function getItemsInType(itemTypeId: string): Promise<item[] | null> {
+  const items = await prisma.item.findMany({
+    where: { itemTypeId: itemTypeId }
+  });
+  return items ?? null;
+}
 
 export async function getItemsInSale(saleId: string): Promise<item[] | null> {
   const items = await prisma.item.findMany({

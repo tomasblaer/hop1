@@ -5,7 +5,7 @@ import {
   insertItem,
   updateItem,
   deleteItem,
-} from "../lib/db";
+} from "../lib/db.js";
 import { Prisma, item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
 

@@ -16,14 +16,14 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
   } catch (e) {
     return next(e);
   }
-  res.json({ user: insertedUser });
+  res.status(201).json("User created");
 }
 
 export async function getUserByUsername(username: string): Promise<user | null> {
 
   let user: user | null = null;
   user = await getUser(username);
-  return null;
+  return user;
 }
 
 export const createUser = [validateUser, createUserHandler].flat();

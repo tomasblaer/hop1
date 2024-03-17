@@ -17,9 +17,9 @@ export function handleError(
   next: NextFunction
 ): Response {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    const actionType: string = req.originalUrl
+    const actionType: string = req.originalUrl.replace('/','');
     if (err.code === "P2002") {
-      // Unique constraint failed in team creation / update
+      // Unique constraint failed in company / item type creation / update
       return res
         .status(400)
         .json({ error: `error executing, ${actionType} already exists` });
@@ -29,7 +29,7 @@ export function handleError(
         .status(400)
         .json({ error: `error executing, ${actionType} not found` });
     } else if (err.code === "P2003") {
-      // Foreign key constraint failed in game creation / update
+      // Foreign key constraint failed in item / user creation / update
       return res
         .status(400)
         .json({ error: `error executing, companyId must be valid` });
