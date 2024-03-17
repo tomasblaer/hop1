@@ -26,6 +26,40 @@ export async function addItem(
   return res.status(201).json(itemCreated);
 }
 
+export async function editItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response> {
+  const id = parseInt(req.params.id);
+  const { itemTypeId, companyId, saleId } = req.body;
+
+  let itemUpdated: item | null = null;
+  try {
+    itemUpdated = await updateItem(id, { itemTypeId, companyId, saleId });
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.status(200).json(itemUpdated);
+}
+
+export async function removeItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response> {
+  const id = parseInt(req.params.id);
+
+  let itemDeleted: item | null = null;
+  try {
+    itemDeleted = await deleteItem(id);
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.status(200).json(itemDeleted);
+}
 
 export async function listItemsInSale(
   req: Request,
@@ -57,59 +91,7 @@ export async function listItemsInCompany(
   return res.json(item);
 }
 
-export async function createItemHandler(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void | Response> {
-  const { name, price, amount, companyId, saleId, itemTypeId } = req.body;
-
-  let itemCreated: item | null = null;
-  try {
-    itemCreated = await insertItem({ itemTypeId, companyId, saleId });
-  } catch (err) {
-    return next(err);
-  }
-
-  return res.status(201).json(itemCreated);
-}
-
-export async function updateItemHandler(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void | Response> {
-  const id = parseInt(req.params.id);
-  const { companyId, saleId, itemTypeId } = req.body;
-
-  let itemUpdated: item | null = null;
-  try {
-    itemUpdated = await updateItem(id, { itemTypeId, companyId, saleId });
-  } catch (err) {
-    return next(err);
-  }
-
-  return res.status(200).json(itemUpdated);
-}
-
-export async function deleteItemHandler(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void | Response> {
-  const id = parseInt(req.params.id);
-
-  let itemDeleted: item | null = null;
-  try {
-    itemDeleted = await deleteItem(id);
-  } catch (err) {
-    return next(err);
-  }
-
-  return res.status(200).json(itemDeleted);
-}
-
 /* Exports with middleware */
 
-export const createItemMiddleware = [validateItem, createItemHandler].flat();
-export const updateItemMiddleware = [validateItem, updateItemHandler].flat();
+export const createItemMiddleware = [validateItem, addItem].flat();
+export const updateItemMiddleware = [validateItem, editItem].flat();

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
 import { getSale } from "./db.js";
+import { getItemType } from "./db.js";
 import { user } from "@prisma/client";
 import { ResolutionMode } from "typescript";
 
@@ -24,6 +25,14 @@ export function ensureCompany(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+export function ensureAdmin(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as user;
+  if (user.isCompanyAdmin !== true || user.companyId !== parseInt(req.params.companyId)) {
+    return res.status(401).json({ message: "Unauthorized, user is not admin" });
+  }
+  next();
+}
+
 export async function ensureSaleId(req: Request, res: Response, next: NextFunction) {
 
   const user = req.user as user;
@@ -39,16 +48,17 @@ export async function ensureSaleId(req: Request, res: Response, next: NextFuncti
   next();
 }
 
-// export async function ensureItemTypeId(req: Request, res: Response, next: NextFunction) {
-//   const user = req.user as user;
-//   const itemType = await getItemType(req.params.itemTypeId);
+export async function ensureItemTypeId(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as user;
+  const itemType = await getItemType(req.params.itemTypeId);
 
-//   if (!itemType) {
-//     return res.status(404).json({ message: "Sale not found" });
-//   }
-//   // If sale does not belong to user company
-//   if (itemType.companyId !== user.companyId) {
-//     return res.status(401).json({ message: "Unauthorized, companyId does not match" });
-//   }
-//   next();
-// }
+  if (!itemType) {
+    return res.status(404).json({ message: "Sale not found" });
+  }
+  // If sale does not belong to user company
+  if (itemType.companyId !== user.companyId) {
+    return res.status(401).json({ message: "Unauthorized, companyId does not match" });
+  }
+  next();
+}
+

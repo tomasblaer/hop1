@@ -3,8 +3,9 @@ import passport from "passport";
 import {
   listItemsInSale,
   listItemsInCompany,
-  updateItemHandler,
-  deleteItemHandler,
+  addItem,
+  editItem,
+  removeItem,
 } from "./items.js";
 import { 
   listCompanyById,
@@ -15,7 +16,7 @@ import {
 import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { authenticateJWT, ensureCompany, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
 
 
 
@@ -88,19 +89,20 @@ router.post('initialRegister', )// Todo
 
 /* Company routes */
 
-router.get("/company/:id", listCompanyById);
+router.get("/company/:id", authenticateJWT, ensureCompany, listCompanyById);
 router.post("/company", createCompany);
-router.patch("/company/:id", updateCompanyById);
-router.delete("/company/:id", deleteCompanyById);
+router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
+router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
-/* Item routes */
-router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
-router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompany);
 
+/* Item type routes */
 // router.post("/itemType", createItemType);
 // router.patch("/itemType/:id", updateItemType);
 // router.delete("/itemType/:id", deleteItemType);
 
-// router.post("/item/:typeId", authenticateJWT, ensureItemTypeId, addItem);
-// router.patch("/item/:id", editItem);
-// router.delete("/item/:id", removeItem);
+/* Item routes */
+router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
+router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompany);
+router.post("/item", authenticateJWT, ensureItemTypeId, addItem);
+router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
+router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
