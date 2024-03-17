@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, sale, item, user, company } from "@prisma/client";
+import { Prisma, PrismaClient, sale, item, user, company, item_type } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -72,11 +72,11 @@ export async function deleteSale(id: string): Promise<sale | null> {
 
 /* Item Types */
 
-export async function getItemTypes(companyId: number): Promise<item[] | null> {
-  const items = await prisma.item.findMany({
+export async function getItemTypes(companyId: number): Promise<item_type[] | null> {
+  const itemTypes = await prisma.item_type.findMany({
     where: { companyId: companyId }
   });
-  return items ?? null;
+  return itemTypes ?? null;
 }
 
 

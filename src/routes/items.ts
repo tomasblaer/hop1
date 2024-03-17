@@ -9,6 +9,24 @@ import {
 import { Prisma, item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
 
+export async function addItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response> {
+  const { itemTypeId, companyId, saleId } = req.body;
+
+  let itemCreated: item | null = null;
+  try {
+    itemCreated = await insertItem({ itemTypeId, companyId, saleId });
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.status(201).json(itemCreated);
+}
+
+
 export async function listItemsInSale(
   req: Request,
   res: Response,
