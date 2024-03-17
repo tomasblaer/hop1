@@ -18,7 +18,6 @@ export const authenticateJWT = passport.authenticate("jwt", { session: false });
 
 export function ensureCompany(req: Request, res: Response, next: NextFunction) {
   const user = req.user as user;
-  console.log('user',user);
   if (user.companyId !== parseInt(req.params.companyId)) {
     return res.status(401).json({ message: "Unauthorized, companyId does not match" });
   }

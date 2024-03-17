@@ -1,13 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { getImage, uploadImage } from "../lib/cloudinary";
-import { getItemType, getUser } from "../lib/db";
+import { getImage, uploadImage } from "../lib/cloudinary.js";
+import { getItemType, getUser, setUserImage } from "../lib/db.js";
 import { user } from "@prisma/client";
+import cloudinary from "cloudinary";
 
 export async function getUserImage(req: Request, res: Response, next: NextFunction) {
-  const id = req.params.id;
-  if (!id) {
-    return next(new Error("Bad Request:Missing required fields, id"));
-  }
+
   const user = req.user as user;
 
   if (!user) {
@@ -43,7 +41,9 @@ export async function getItemTypeImage(req: Request, res: Response, next: NextFu
 export async function uploadImageHandler(req: Request, res: Response, next: NextFunction) {
   if (req.file) {
     try {
-      uploadImage(req.file);
+      const image = await uploadImage(req.file) as cloudinary.UploadApiResponse;
+      const user = req.user as user;
+      await setUserImage(user.id, image.public_id);
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Error uploading image' });

@@ -8,7 +8,7 @@ export const storage = multer.diskStorage({
 });
 
 function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
-  if (file.mimetype !== 'image/png') {
+  if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
     return cb(new Error('Something went wrong'));
   }
   cb(null, true);

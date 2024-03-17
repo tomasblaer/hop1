@@ -185,3 +185,11 @@ export async function deleteUser(id: number): Promise<user | null> {
   });
   return user ?? null;
 };
+
+export async function setUserImage(id: number, imageId: string): Promise<user | null> {
+  const user = await prisma.user.update({
+    where: { id: id },
+    data: { imageId: imageId }
+  });
+  return user ?? null;
+}
