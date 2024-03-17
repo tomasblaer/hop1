@@ -7,7 +7,7 @@ import {
   editItem,
   removeItem,
 } from "./items.js";
-import { 
+import {
   listCompanyById,
   createCompany,
   updateCompanyById,
@@ -17,6 +17,8 @@ import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { createItemType, getItemTypeById, getItemTypesByCId } from "./itemType.js";
+import { deleteItemType, insertItemType } from "../lib/db.js";
 
 
 
@@ -96,9 +98,11 @@ router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
 
 /* Item type routes */
-// router.post("/itemType", createItemType);
-// router.patch("/itemType/:id", updateItemType);
-// router.delete("/itemType/:id", deleteItemType);
+router.get("/itemType/:id", authenticateJWT, getItemTypeById);
+router.get("/itemType/:companyId", authenticateJWT, getItemTypesByCId);
+router.post("/itemType", authenticateJWT, createItemType);
+router.patch("/itemType/:id", authenticateJWT, insertItemType);
+router.delete("/itemType/:id", authenticateJWT, deleteItemType);
 
 /* Item routes */
 router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
