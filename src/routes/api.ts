@@ -13,17 +13,13 @@ import {
   updateCompanyById,
   deleteCompanyById,
 } from "./companies.js";
-import { createUser, getUserByUsername } from "./users.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import {
-  authenticateJWT,
-  ensureAdmin,
-  ensureCompany,
-  ensureItemTypeId,
-  ensureSaleId,
-  getSecretAssert,
-} from "../lib/authorization.js";
+
+import { createUser, getUserByUsername } from './users.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemType, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { createItemType, deleteItemTypeById, getItemTypeById, getItemTypesByCId, updateItemTypeById } from "./itemType.js";
+import { deleteItemType, insertItemType } from "../lib/db.js";
 
 export const router = express.Router();
 
@@ -106,9 +102,11 @@ router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
 
 /* Item type routes */
-// router.post("/itemType", createItemType);
-// router.patch("/itemType/:id", updateItemType);
-// router.delete("/itemType/:id", deleteItemType);
+router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemType, getItemTypeById);
+router.get("/itemType/:companyId", authenticateJWT, ensureCompany, getItemTypesByCId);
+router.post("/itemType", authenticateJWT, createItemType);
+router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemType, updateItemTypeById);
+router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemType, deleteItemTypeById);
 
 /* Item routes */
 
