@@ -1,4 +1,3 @@
-import e from "express";
 import { Schema } from "express-validator";
 
 export const createItemSchema: Schema = {
