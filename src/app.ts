@@ -23,7 +23,7 @@ const jwtOptions = {
   secretOrKey: getSecretAssert(),
 };
 
-passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: JWTUser, done: DoneCallback) => {
+passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: user, done: DoneCallback) => {
   console.log('jwt_payload', jwt_payload);
   let user: user | null = null
   try {

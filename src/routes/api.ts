@@ -95,7 +95,7 @@ router.delete("/company/:id", deleteCompanyById);
 
 /* Item routes */
 router.get("/items/sale/:saleId", authenticateJWT, ensureSaleId, listItemsInSale);
-// router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemTypesInCompany);
+router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompany);
 
 // router.post("/itemType", createItemType);
 // router.patch("/itemType/:id", updateItemType);

@@ -50,7 +50,6 @@ model item_type {
   id        String      @id @default(uuid())
   name      String
   price     Int
-  amount    Int
   companyId Int
   company   company  @relation(fields: [companyId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
   items     item[]
