@@ -3,9 +3,11 @@ import { getUser, insertUser } from "../lib/db.js";
 import bcrypt from "bcrypt";
 import { user } from "@prisma/client";
 import { validateUser } from "../lib/validation.js";
+import { getCompanyId } from "../lib/util.js";
 
 export async function createUserHandler(req: Request, res: Response, next: NextFunction) {
-  const { username, email, companyId, password } = req.body;
+  const { username, email, password } = req.body;
+  const companyId = getCompanyId(req);
 
   let insertedUser: user | null = null;
 
