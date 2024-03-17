@@ -8,17 +8,25 @@ import {
 } from "../lib/db.js";
 import { Prisma, item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
+import { getCompanyId } from "../lib/util.js";
 
 export async function addItem(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const { itemTypeId, companyId, comment, location } = req.body;
+
+  const { itemTypeId, comment, location } = req.body;
+  const companyId = getCompanyId(req);
 
   let itemCreated: item | null = null;
   try {
-    itemCreated = await insertItem({ itemTypeId, companyId, comment, location });
+    itemCreated = await insertItem({
+      itemTypeId,
+      companyId,
+      comment,
+      location,
+    });
   } catch (err) {
     return next(err);
   }
@@ -81,8 +89,10 @@ export async function listItemsInCompany(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const companyId = req.params.companyId;
-  const item = await getItemsInCompany(parseInt(companyId));
+
+  const companyId = getCompanyId(req);
+  const item = await getItemsInCompany(companyId);
+
 
   if (!item) {
     return next(new Error("No items found"));
