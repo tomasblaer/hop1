@@ -14,7 +14,7 @@ export async function getItemTypeById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.body.id;
+  const id = req.params.id;
   const itemType = getItemType(id);
 
   if (!itemType) {
@@ -30,8 +30,8 @@ export async function getItemTypesByCId(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const companyId = req.body.companyId;
-  const itemTypes = getItemTypes(companyId);
+  const companyId = req.params.companyId;
+  const itemTypes = getItemTypes(parseInt(companyId));
 
   if (!itemTypes) {
     return next(new Error("No item types found"));
