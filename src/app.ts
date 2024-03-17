@@ -24,7 +24,6 @@ const jwtOptions = {
 };
 
 passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: JWTUser, done: DoneCallback) => {
-  console.log('jwt_payload', jwt_payload);
   let user: user | null = null
   try {
     user = await getUserByUsername(jwt_payload.username);

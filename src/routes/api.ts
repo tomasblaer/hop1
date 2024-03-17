@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import passport from "passport";
 import {
   listItemsInSale,
   listItemsInCompany,
@@ -13,13 +12,23 @@ import {
   updateCompanyById,
   deleteCompanyById,
 } from "./companies.js";
-
-import { createUser, getUserByUsername } from './users.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemType, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
-import { createItemType, deleteItemTypeById, getItemTypeById, getItemTypesByCId, updateItemTypeById } from "./itemType.js";
-import { deleteItemType, insertItemType } from "../lib/db.js";
+import { createUser, getUserByUsername } from "./users.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import {
+  authenticateJWT,
+  ensureAdmin,
+  ensureCompany,
+  ensureItemTypeId,
+  ensureSaleId,
+  getSecretAssert,
+} from "../lib/authorization.js";
+import { upload } from "../lib/multer.js";
+import {
+  getUserImage,
+  uploadItemTypeImageHandler,
+  uploadUserImageHandler,
+} from "./images.js";
 
 export const router = express.Router();
 
@@ -99,8 +108,6 @@ router.post("/company", createCompany);
 router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
 
-
-
 /* Item type routes */
 router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemType, getItemTypeById);
 router.get("/itemType/:companyId", authenticateJWT, ensureCompany, getItemTypesByCId);
@@ -125,3 +132,20 @@ router.get(
 router.post("/item", authenticateJWT, ensureItemTypeId, addItem);
 router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
 router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
+
+/* Images */
+router.post(
+  "/user/upload",
+  authenticateJWT,
+  upload.single("image"),
+  uploadUserImageHandler
+);
+
+router.get(
+  "/item/image/:itemTypeId",
+  authenticateJWT,
+  ensureItemTypeId,
+  uploadItemTypeImageHandler
+);
+
+router.get("/user/image", authenticateJWT, getUserImage);

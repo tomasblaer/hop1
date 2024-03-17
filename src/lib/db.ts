@@ -106,6 +106,14 @@ export async function deleteItemType(id: string): Promise<item_type | null> {
   return itemType ?? null;
 }
 
+export async function setItemTypeImage(id: string, imageId: string): Promise<item_type | null> {
+  const itemType = await prisma.item_type.update({
+    where: { id: id },
+    data: { imageId: imageId }
+  });
+  return itemType ?? null;
+}
+
 /* Items */
 
 export async function getItemsInType(itemTypeId: string): Promise<item[] | null> {
@@ -185,3 +193,11 @@ export async function deleteUser(id: number): Promise<user | null> {
   });
   return user ?? null;
 };
+
+export async function setUserImage(id: number, imageId: string): Promise<user | null> {
+  const user = await prisma.user.update({
+    where: { id: id },
+    data: { imageId: imageId }
+  });
+  return user ?? null;
+}
