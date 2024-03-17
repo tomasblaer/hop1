@@ -12,7 +12,7 @@ function fileFilter(req: Request, file: Express.Multer.File, cb: FileFilterCallb
     return cb(new Error('Something went wrong'));
   }
   cb(null, true);
-};
+}
 
 export const upload = multer({
   storage: storage,

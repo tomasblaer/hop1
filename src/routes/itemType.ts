@@ -1,8 +1,7 @@
 import { NextFunction, Response, Request } from "express";
-import { Prisma, item_type } from "@prisma/client";
+import { item_type } from "@prisma/client";
 import {
   deleteItemType,
-  getCompany,
   getItemType,
   getItemTypes,
   insertItemType,

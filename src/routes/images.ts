@@ -2,12 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { getImage, uploadImage } from "../lib/cloudinary.js";
 import {
   getItemType,
-  getUser,
   setItemTypeImage,
   setUserImage,
 } from "../lib/db.js";
 import { user } from "@prisma/client";
 import cloudinary from "cloudinary";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 export async function getUserImage(
   req: Request,

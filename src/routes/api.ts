@@ -10,7 +10,7 @@ import {
   listCompanyById,
   createCompany,
   updateCompanyById,
-  deleteCompanyById,
+  deleteCompany,
 } from "./companies.js";
 import { createUser, getUserByUsername } from "./users.js";
 import jwt from "jsonwebtoken";
@@ -19,6 +19,7 @@ import {
   authenticateJWT,
   ensureAdmin,
   ensureCompany,
+  ensureItemId,
   ensureItemTypeId,
   ensureSaleId,
   getSecretAssert,
@@ -29,6 +30,7 @@ import {
   uploadItemTypeImageHandler,
   uploadUserImageHandler,
 } from "./images.js";
+import { createItemType, deleteItemTypeById, getItemTypeById, getItemTypesByCId, updateItemTypeById } from "./itemType.js";
 
 export const router = express.Router();
 
@@ -53,6 +55,18 @@ export async function index(req: Request, res: Response) {
     {
       href: "/items/:companyId",
       methods: ["GET", "PATCH", "DELETE"],
+    },
+    {
+      href: "/itemType",
+      methods: ["POST"],
+    },
+    {
+      href: "/itemType/:itemTypeId",
+      methods: ["GET", "PATCH", "DELETE"],
+    },
+    {
+      href: "/itemType/:companyId",
+      methods: ["GET"],
     },
   ]);
 }
@@ -98,22 +112,22 @@ router.post(
 );
 
 /* Users */
-router.post("/register", createUser); // Finna ut ur auth leið með þetta
+router.post("/register", ensureAdmin, createUser); // Finna ut ur auth leið með þetta
 router.post("initialRegister"); // Todo
 
 /* Company routes */
 
-router.get("/company/:id", authenticateJWT, ensureCompany, listCompanyById);
+router.get("/company/:companyId", authenticateJWT, ensureCompany, listCompanyById);
 router.post("/company", createCompany);
-router.patch("/company/:id", authenticateJWT, ensureAdmin, updateCompanyById);
-router.delete("/company/:id", authenticateJWT, ensureAdmin, deleteCompanyById);
+router.patch("/company/:companyId", authenticateJWT, ensureAdmin, updateCompanyById);
+router.delete("/company/:companyId", authenticateJWT, ensureAdmin, deleteCompany);
 
 /* Item type routes */
-router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemType, getItemTypeById);
+router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, getItemTypeById);
 router.get("/itemType/:companyId", authenticateJWT, ensureCompany, getItemTypesByCId);
 router.post("/itemType", authenticateJWT, createItemType);
-router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemType, updateItemTypeById);
-router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemType, deleteItemTypeById);
+router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, updateItemTypeById);
+router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, deleteItemTypeById);
 
 /* Item routes */
 
@@ -129,9 +143,9 @@ router.get(
   ensureCompany,
   listItemsInCompany
 );
-router.post("/item", authenticateJWT, ensureItemTypeId, addItem);
-router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
-router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
+router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);
+router.patch("/item/:itemTypeId", authenticateJWT, ensureItemId, editItem);
+router.delete("/item/:itemTypeId", authenticateJWT, ensureItemId, removeItem);
 
 /* Images */
 router.post(

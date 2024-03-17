@@ -6,7 +6,7 @@ import {
   updateItem,
   deleteItem,
 } from "../lib/db.js";
-import { Prisma, item } from "@prisma/client";
+import { item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
 import { getCompanyId } from "../lib/util.js";
 
@@ -16,7 +16,8 @@ export async function addItem(
   next: NextFunction
 ): Promise<void | Response> {
 
-  const { itemTypeId, comment, location } = req.body;
+  const { comment, location } = req.body;
+  const itemTypeId = req.params.itemTypeId;
   const companyId = getCompanyId(req);
 
   let itemCreated: item | null = null;
@@ -40,6 +41,7 @@ export async function editItem(
   next: NextFunction
 ): Promise<void | Response> {
   const id = parseInt(req.params.id);
+  
   const { comment, location } = req.body;
 
   let itemUpdated: item | null = null;

@@ -18,7 +18,7 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
   } catch (e) {
     return next(e);
   }
-  res.status(201).json("User created");
+  res.status(201).json( `User ${insertedUser?.username} created` );
 }
 
 export async function getUserByUsername(username: string): Promise<user | null> {

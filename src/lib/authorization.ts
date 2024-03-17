@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { getSale, getItemType } from "./db.js";
-import { company, user } from "@prisma/client";
-import { ResolutionMode } from "typescript";
+import { getSale, getItemType, getItem } from "./db.js";
+import { user } from "@prisma/client";
 
 export function getSecretAssert(): string {
-  let secret = process.env.SECRET;
+  const secret = process.env.SECRET;
   if (!secret) {
     console.error("No secret found, please see .env example file");
     process.exit(1);
@@ -25,7 +24,7 @@ export function ensureCompany(req: Request, res: Response, next: NextFunction) {
 
 export function ensureAdmin(req: Request, res: Response, next: NextFunction) {
   const user = req.user as user;
-  if (user.isCompanyAdmin !== true || user.companyId !== parseInt(req.params.companyId)) {
+  if (user.isCompanyAdmin !== true) {
     return res.status(401).json({ message: "Unauthorized, user is not admin" });
   }
   next();
@@ -60,12 +59,16 @@ export async function ensureItemTypeId(req: Request, res: Response, next: NextFu
   next();
 }
 
-export function ensureItemType(req: Request, res: Response, next: NextFunction) {
-  const company = req.body.company as company;
+export async function ensureItemId(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as user;
+  const item = await getItem(parseInt(req.params.itemId));
 
-  if (company.id !== parseInt(req.params.companyId)) {
+  if (!item) {
+    return res.status(404).json({ message: "Item not found" });
+  }
+  // If item does not belong to user company
+  if (item.companyId !== user.companyId) {
     return res.status(401).json({ message: "Unauthorized, companyId does not match" });
   }
   next();
 }
-

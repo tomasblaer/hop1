@@ -17,7 +17,7 @@ export async function getCompany(id: number): Promise<company | null> {
 export async function insertCompany(data: Prisma.companyCreateInput): Promise<company | null> {
   const company = await prisma.company.create({ data });
   return company ?? null;
-};
+}
 
 export async function updateCompany(id: number, data: Prisma.companyUpdateInput): Promise<company | null> {
   const company = await prisma.company.update({
@@ -25,14 +25,14 @@ export async function updateCompany(id: number, data: Prisma.companyUpdateInput)
     data
   });
   return company ?? null;
-};
+}
 
-export async function deleteCompany(id: number): Promise<company | null> {
+export async function deleteCompanyById(id: number): Promise<company | null> {
   const company = await prisma.company.delete({
     where: { id: id }
   });
   return company ?? null;
-};
+}
 
 /* Sales */
 
@@ -53,7 +53,7 @@ export async function getSale(id: string): Promise<sale | null> {
 export async function createSale(data: Prisma.saleUncheckedCreateInput): Promise<sale | null> {
   const sale = prisma.sale.create({ data });
   return sale ?? null;
-};
+}
 
 export async function updateSale(id: string, data: Prisma.saleUpdateInput): Promise<sale | null> {
   const sale = await prisma.sale.update({
@@ -61,14 +61,14 @@ export async function updateSale(id: string, data: Prisma.saleUpdateInput): Prom
     data
   });
   return sale ?? null;
-};
+}
 
 export async function deleteSale(id: string): Promise<sale | null> {
   const sale = await prisma.sale.delete({
     where: { id: id }
   });
   return sale ?? null;
-};
+}
 
 /* Item Types */
 
@@ -116,6 +116,13 @@ export async function setItemTypeImage(id: string, imageId: string): Promise<ite
 
 /* Items */
 
+export async function getItem(id: number): Promise<item | null> {
+  const item = await prisma.item.findUnique({
+    where: { id: id }
+  });
+  return item ?? null;
+}
+
 export async function getItemsInType(itemTypeId: string): Promise<item[] | null> {
   const items = await prisma.item.findMany({
     where: { itemTypeId: itemTypeId }
@@ -140,7 +147,7 @@ export async function getItemsInCompany(companyId: number): Promise<item[] | nul
 export async function insertItem(data: Prisma.itemUncheckedCreateInput): Promise<item | null> {
   const item = await prisma.item.create({ data });
   return item ?? null;
-};
+}
 
 export async function updateItem(id: number, data: Prisma.itemUncheckedUpdateInput): Promise<item | null> {
   const item = await prisma.item.update({
@@ -148,14 +155,14 @@ export async function updateItem(id: number, data: Prisma.itemUncheckedUpdateInp
     data
   });
   return item ?? null;
-};
+}
 
 export async function deleteItem(id: number): Promise<item | null> {
   const item = await prisma.item.delete({
     where: { id: id }
   });
   return item ?? null;
-};
+}
 
 /* Users */
 
@@ -177,7 +184,7 @@ export async function getCompanyIdOfUser(id: number): Promise<number | null> {
 export async function insertUser(data: Prisma.userUncheckedCreateInput): Promise<user | null> {
   const user = await prisma.user.create({ data });
   return user ?? null;
-};
+}
 
 export async function updateUser(id: number, data: Prisma.userUpdateInput): Promise<user | null> {
   const user = await prisma.user.update({
@@ -185,14 +192,14 @@ export async function updateUser(id: number, data: Prisma.userUpdateInput): Prom
     data
   });
   return user ?? null;
-};
+}
 
 export async function deleteUser(id: number): Promise<user | null> {
   const user = await prisma.user.delete({
     where: { id: id }
   });
   return user ?? null;
-};
+}
 
 export async function setUserImage(id: number, imageId: string): Promise<user | null> {
   const user = await prisma.user.update({

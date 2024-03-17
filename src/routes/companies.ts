@@ -3,17 +3,18 @@ import {
   getCompany,
   insertCompany,
   updateCompany,
-  deleteCompany,
+  deleteCompanyById,
 } from "../lib/db.js";
 import { company } from "@prisma/client";
 import { validateCompany } from "../lib/validation.js";
+import { getCompanyId } from "../lib/util.js";
 
 export async function listCompanyById(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = req.params.companyId;
   const company = await getCompany(parseInt(id));
 
   if (!company) {
@@ -47,7 +48,7 @@ export async function updateCompanyById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
+  const id = getCompanyId(req);
   const { name } = req.body;
 
   if (!name) {
@@ -56,7 +57,7 @@ export async function updateCompanyById(
 
   let companyUpdated: company | null = null;
   try {
-    companyUpdated = await updateCompany(parseInt(id), { name });
+    companyUpdated = await updateCompany(id, { name });
   } catch (err) {
     return next(err);
   }
@@ -64,13 +65,13 @@ export async function updateCompanyById(
   return res.status(200).json(companyUpdated);
 }
 
-export async function deleteCompanyById(
+export async function deleteCompany(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.id;
-  const company = await deleteCompany(parseInt(id));
+  const id = getCompanyId(req);
+  const company = await deleteCompanyById(id);
 
   if (!company) {
     return next(new Error("No company found"));
