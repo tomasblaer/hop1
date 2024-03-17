@@ -14,11 +14,11 @@ export async function addItem(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const { itemTypeId, companyId, saleId } = req.body;
+  const { itemTypeId, companyId, comment, location } = req.body;
 
   let itemCreated: item | null = null;
   try {
-    itemCreated = await insertItem({ itemTypeId, companyId, saleId });
+    itemCreated = await insertItem({ itemTypeId, companyId, comment, location });
   } catch (err) {
     return next(err);
   }
@@ -32,11 +32,11 @@ export async function editItem(
   next: NextFunction
 ): Promise<void | Response> {
   const id = parseInt(req.params.id);
-  const { itemTypeId, companyId, saleId } = req.body;
+  const { comment, location } = req.body;
 
   let itemUpdated: item | null = null;
   try {
-    itemUpdated = await updateItem(id, { itemTypeId, companyId, saleId });
+    itemUpdated = await updateItem(id, { comment, location });
   } catch (err) {
     return next(err);
   }
