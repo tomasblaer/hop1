@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import passport from "passport";
 import {
   listItemsInSale,
   listItemsInCompany,
@@ -17,6 +16,8 @@ import { createUser, getUserByUsername } from './users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { authenticateJWT, ensureAdmin, ensureCompany, ensureItemTypeId, ensureSaleId, getSecretAssert } from '../lib/authorization.js';
+import { upload } from "../lib/multer.js";
+import { getItemTypeImage, getUserImage, uploadImageHandler } from "./images.js";
 
 
 
@@ -106,3 +107,10 @@ router.get("/items/:companyId", authenticateJWT, ensureCompany, listItemsInCompa
 router.post("/item", authenticateJWT, ensureItemTypeId, addItem);
 router.patch("/item", authenticateJWT, ensureItemTypeId, editItem);
 router.delete("/item", authenticateJWT, ensureItemTypeId, removeItem);
+
+/* Images */
+router.post('/user/upload', authenticateJWT, upload.single('image'), uploadImageHandler);
+
+router.get('/item/image/:itemTypeId', authenticateJWT, ensureItemTypeId, getItemTypeImage);
+
+router.get('/user/image', authenticateJWT, getUserImage);
