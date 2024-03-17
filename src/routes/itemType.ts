@@ -6,9 +6,9 @@ import {
   getItemTypes,
   insertItemType,
   updateItemType
- } from "../lib/db";
-import { validateItemType } from "../lib/validation";
-import { getCompanyId } from "../lib/util";
+ } from "../lib/db.js";
+import { validateItemType } from "../lib/validation.js";
+import { getCompanyId } from "../lib/util.js";
 
 export async function getItemTypeById(
   req: Request,

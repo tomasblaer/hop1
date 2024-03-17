@@ -5,9 +5,10 @@ import {
   updateCompany,
   deleteCompanyById,
 } from "../lib/db.js";
-import { company } from "@prisma/client";
+import { company, user } from "@prisma/client";
 import { validateCompany } from "../lib/validation.js";
 import { getCompanyId } from "../lib/util.js";
+import { generateCompanyInitialUser } from "./users.js";
 
 export async function listCompanyById(
   req: Request,
@@ -32,15 +33,22 @@ export async function createCompany(
   if (!name) {
     return next(new Error("Bad Request:Missing required fields, name"));
   }
-
   let companyCreated: company | null = null;
+  let initialUser: user | null = null;
   try {
     companyCreated = await insertCompany({ name });
+    if (!companyCreated) {
+      return next(new Error("Company not created"));
+    }
+    initialUser = await generateCompanyInitialUser(companyCreated);
+
   } catch (err) {
     return next(err);
   }
-
-  return res.status(201).json(companyCreated);
+  return res.status(201).json({
+    'company': companyCreated,
+    'admin': initialUser,
+  });
 }
 
 export async function updateCompanyById(

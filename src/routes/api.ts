@@ -112,8 +112,7 @@ router.post(
 );
 
 /* Users */
-router.post("/register", ensureAdmin, createUser); // Finna ut ur auth leið með þetta
-router.post("initialRegister"); // Todo
+router.post("/register", ensureAdmin, createUser);
 
 /* Company routes */
 
