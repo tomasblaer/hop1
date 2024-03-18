@@ -55,10 +55,9 @@ POST - {{url}}/itemType
 
 bæta inn vöru á týpuna
 
-POST - {{url}}/items
+POST - {{url}}/items/:itemTypeId
 
 {
-    "itemTypeId": "{uuid sem var fengið við að stofna týpuna}"
     "comment": "Þú ert ekki þú sjálfur nema þegar þú borðar Snickers"
     "location": "Vöruhús 1"
 }

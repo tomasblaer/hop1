@@ -34,8 +34,12 @@ export async function index(req: Request, res: Response) {
       methods: ["GET", "PATCH", "DELETE"],
     },
     {
-      href: "/item",
-      methods: ["POST", "PATCH", "DELETE"],
+      href: "/item/:itemTypeId",
+      methods: ["POST"],
+    },
+    {
+      href: "/item/:itemId",
+      methods: ["PATCH", "DELETE"],
     },
     {
       href: "/items/sale/:saleId",
