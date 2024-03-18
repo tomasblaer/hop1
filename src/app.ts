@@ -37,8 +37,6 @@ passport.use(new JwtStrategy (jwtOptions, async (jwt_payload: JWTUser, done: Don
   }
 }));
 
-app.use(authenticateJWT);
-
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

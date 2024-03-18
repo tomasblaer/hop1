@@ -116,7 +116,7 @@ router.post(
 );
 
 /* Users */
-router.post("/register", ensureAdmin, createUser);
+router.post("/register", authenticateJWT, ensureAdmin, createUser);
 
 /* Company routes */
 
