@@ -143,8 +143,8 @@ router.get(
   listItemsInCompany
 );
 router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);
-router.patch("/item/:itemTypeId", authenticateJWT, ensureItemId, editItem);
-router.delete("/item/:itemTypeId", authenticateJWT, ensureItemId, removeItem);
+router.patch("/item/:itemId", authenticateJWT, ensureItemId, editItem);
+router.delete("/item/:itemId", authenticateJWT, ensureItemId, removeItem);
 
 /* Images */
 router.post(
