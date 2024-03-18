@@ -20,7 +20,7 @@ Gera eftirfarandi:
 - keyra npx prisma db push
 
 ## Innskráning:
-Til að innskrá sig verður að búa til company á eftirfarandi hátt:
+Til að innskrá sig verður fara í postman og búa til company á eftirfarandi hátt:
 
 post request {{url}}/company
 með json gögn sem inniheldur bara "name"
@@ -33,7 +33,7 @@ næst post request {{url}}/login
 með json gögnum sem innihalda áður skráða username og password
 t.d.
 {
-    "username": "{notandanafnið sem var myndað eftir að fyrirtækið var stofnað}"
+    "username": "{notandanafnið sem var myndað eftir að fyrirtækið var stofnað}",
     "password": "{lykilorðið sem var myndað eftir að fyrirtækið var stofnað}"
 }
 
@@ -49,7 +49,7 @@ Búa til vöru týpu
 POST - {{url}}/itemType
 
 {
-    "name": "Snickers"
+    "name": "Snickers",
     "price": 400
 }
 
@@ -58,7 +58,7 @@ bæta inn vöru á týpuna
 POST - {{url}}/items/:itemTypeId
 
 {
-    "comment": "Þú ert ekki þú sjálfur nema þegar þú borðar Snickers"
+    "comment": "Þú ert ekki þú sjálfur nema þegar þú borðar Snickers",
     "location": "Vöruhús 1"
 }
 
