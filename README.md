@@ -11,7 +11,7 @@
 Markmiðið með þessu verkefni var að útbúa vefþjónustu sem heldur utan um lagerstöðu fyrirtækis og sölu á vörum. Þú átt að geta stofnað notanda á fyrirtæki sem getur síðan stofnað vöru týpu og stofnað vörur undir týpunni.
 
 ## Hýsing
-[Lén](hop1-production.up.railway.app)
+[Lén](https://hop1-production.up.railway.app)
 
 ## Hvernig setja á upp verkefnið.
 Gera eftirfarandi:
