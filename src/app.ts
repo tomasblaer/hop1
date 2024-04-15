@@ -15,6 +15,7 @@ const app = express();
 
 dotenv.config();
 
+app.use(cors);
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cors);
