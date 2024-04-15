@@ -34,8 +34,6 @@ export async function getItemTypesByCId(
   const companyId = getCompanyId(req);
   const itemTypes = await getItemTypes(companyId);
 
-  console.log(itemTypes);
-
   if (!itemTypes) {
     return next(new Error("No item types found"));
   }
