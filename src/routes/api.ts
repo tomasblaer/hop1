@@ -122,12 +122,12 @@ router.post("/register", authenticateJWT, ensureAdmin, createUser);
 
 router.get("/company/:companyId", authenticateJWT, ensureCompany, listCompanyById);
 router.post("/company", createCompany);
-router.patch("/company/:companyId", authenticateJWT, ensureAdmin, updateCompanyById);
-router.delete("/company/:companyId", authenticateJWT, ensureAdmin, deleteCompany);
+router.patch("/company", authenticateJWT, ensureAdmin, updateCompanyById);
+router.delete("/company", authenticateJWT, ensureAdmin, deleteCompany);
 
 /* Item type routes */
 router.get("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, getItemTypeById);
-router.get("/itemType/:companyId", authenticateJWT, ensureCompany, getItemTypesByCId);
+router.get("/itemType", authenticateJWT, getItemTypesByCId);
 router.post("/itemType", authenticateJWT, createItemType);
 router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, updateItemTypeById);
 router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, deleteItemTypeById);
@@ -143,7 +143,6 @@ router.get(
 router.get(
   "/items/:companyId",
   authenticateJWT,
-  ensureCompany,
   listItemsInCompany
 );
 router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);

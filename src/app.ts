@@ -9,6 +9,7 @@ import { authenticateJWT, getSecretAssert } from "./lib/authorization.js";
 import { getUserByUsername } from "./routes/users.js";
 import { user } from "@prisma/client";
 import { JWTUser } from "./lib/types.js";
+import { cors } from "./lib/cors.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(passport.initialize());
+app.use(cors);
 app.use(router);
 
 const jwtOptions = {

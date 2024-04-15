@@ -32,8 +32,9 @@ export async function getItemTypesByCId(
   next: NextFunction
 ): Promise<void | Response> {
   const companyId = getCompanyId(req);
-  const itemTypes = getItemTypes(companyId);
+  const itemTypes = await getItemTypes(companyId);
 
+  console.log(itemTypes);
 
   if (!itemTypes) {
     return next(new Error("No item types found"));
