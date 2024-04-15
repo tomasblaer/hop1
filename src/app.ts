@@ -15,10 +15,11 @@ const app = express();
 
 dotenv.config();
 
+app.use(cors);
 app.use(express.json());
 app.use(passport.initialize());
 app.use(router);
-app.use(cors)
+
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: getSecretAssert(),
