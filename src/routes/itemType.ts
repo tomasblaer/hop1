@@ -16,7 +16,7 @@ export async function getItemTypeById(
   next: NextFunction
 ): Promise<void | Response> {
   const id = req.params.itemTypeId;
-  const itemType = getItemType(id);
+  const itemType = await getItemType(id);
 
   if (!itemType) {
     return next(new Error("No item type found"));
