@@ -15,8 +15,8 @@ export async function listCompanyById(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = req.params.companyId;
-  const company = await getCompany(parseInt(id));
+  const id = getCompanyId(req);
+  const company = await getCompany(id);
 
   if (!company) {
     return next(new Error("No company found"));

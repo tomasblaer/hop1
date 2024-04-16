@@ -121,7 +121,7 @@ router.post("/register", authenticateJWT, ensureAdmin, createUser);
 
 /* Company routes */
 
-router.get("/company/:companyId", authenticateJWT, ensureCompany, listCompanyById);
+router.get("/company", authenticateJWT, listCompanyById);
 router.post("/company", createCompany);
 router.patch("/company", authenticateJWT, ensureAdmin, updateCompanyById);
 router.delete("/company", authenticateJWT, ensureAdmin, deleteCompany);
