@@ -87,6 +87,8 @@ export async function uploadItemTypeImageHandler(
       console.error(e);
       res.status(500).json({ message: "Error uploading image" });
     }
+  } else {
+    return next(new Error("Bad Request:No image provided"));
   }
   res.status(200).json({ message: "Image uploaded" });
 }
