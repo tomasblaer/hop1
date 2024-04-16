@@ -36,7 +36,7 @@ export async function getItemTypeImage(
 ) {
   const id = req.params.itemTypeId;
   if (!id) {
-    return next(new Error("Bad Request:Missing required fields, id"));
+    return next(new Error("Bad Request:Missing required fields, itemTypeId"));
   }
   const itemType = await getItemType(id);
 
