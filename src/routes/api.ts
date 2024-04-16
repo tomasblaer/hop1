@@ -5,6 +5,7 @@ import {
   addItem,
   editItem,
   removeItem,
+  listItemsInType,
 } from "./items.js";
 import {
   listCompanyById,
@@ -151,7 +152,7 @@ router.get(
   "/items/type/:itemTypeId",
   authenticateJWT,
   ensureItemTypeId,
-  listItemsInCompany
+  listItemsInType
 );
 router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);
 router.patch("/item/:itemId", authenticateJWT, ensureItemId, editItem);
