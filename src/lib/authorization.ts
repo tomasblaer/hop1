@@ -50,7 +50,7 @@ export async function ensureItemTypeId(req: Request, res: Response, next: NextFu
   const itemType = await getItemType(req.params.itemTypeId);
 
   if (!itemType) {
-    return res.status(404).json({ message: "Sale not found" });
+    return res.status(404).json({ message: "Item type not found" });
   }
   // If sale does not belong to user company
   if (itemType.companyId !== user.companyId) {
