@@ -26,6 +26,7 @@ import {
 } from "../lib/authorization.js";
 import { upload } from "../lib/multer.js";
 import {
+  getItemTypeImage,
   getUserImage,
   uploadItemTypeImageHandler,
   uploadUserImageHandler,
@@ -157,11 +158,13 @@ router.post(
   uploadUserImageHandler
 );
 
-router.get(
-  "/item/image/:itemTypeId",
+router.post(
+  "/itemType/image/:itemTypeId",
   authenticateJWT,
   ensureItemTypeId,
+  upload.single("image"),
   uploadItemTypeImageHandler
 );
 
 router.get("/user/image", authenticateJWT, getUserImage);
+router.get("/itemType/image/:itemTypeId", authenticateJWT, ensureItemTypeId, getItemTypeImage);

@@ -47,7 +47,7 @@ export async function getItemTypeImage(
     return next(new Error("No image found"));
   }
 
-  const image = await getImage(itemType.imageId);
+  const image = getImage(itemType.imageId);
   res.json(image);
 }
 
