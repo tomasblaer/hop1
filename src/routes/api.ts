@@ -133,6 +133,7 @@ router.post("/itemType", authenticateJWT, createItemType);
 router.patch("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, updateItemTypeById);
 router.delete("/itemType/:itemTypeId", authenticateJWT, ensureItemTypeId, deleteItemTypeById);
 
+
 /* Item routes */
 
 router.get(
@@ -144,6 +145,12 @@ router.get(
 router.get(
   "/items/:companyId",
   authenticateJWT,
+  listItemsInCompany
+);
+router.get(
+  "/items/type/:itemTypeId",
+  authenticateJWT,
+  ensureItemTypeId,
   listItemsInCompany
 );
 router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);
