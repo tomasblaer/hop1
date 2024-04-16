@@ -19,5 +19,5 @@ export function uploadImage(file: Express.Multer.File) {
 }
 
 export function getImage(imageId: string) {
-  return cloudinary.v2.image(imageId);
+  return cloudinary.v2.url(imageId);
 }
