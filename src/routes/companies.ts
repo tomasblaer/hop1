@@ -21,6 +21,8 @@ export async function listCompanyById(
   if (!company) {
     return next(new Error("No company found"));
   }
+
+  return res.json(company);
 }
 
 export async function createCompany(
