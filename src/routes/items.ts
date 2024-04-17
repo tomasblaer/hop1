@@ -41,7 +41,7 @@ export async function editItem(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.itemId);
   
   const { comment, location } = req.body;
 
@@ -60,7 +60,7 @@ export async function removeItem(
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.itemId);
 
   let itemDeleted: item | null = null;
   try {

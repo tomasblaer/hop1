@@ -75,6 +75,9 @@ export async function ensureItemId(req: Request, res: Response, next: NextFuncti
 
 export async function ensureItemIdsForSale(req: Request, res: Response, next: NextFunction) {
   const user = req.user as user;
+  if (!req.body.items) {
+    return res.status(400).json({ message: "Bad request, missing items" });
+  }
   const items = await Promise.all(req.body.items.map((itemId: number) => getItem(itemId)));
 
   if (items.some((item) => !item)) {
