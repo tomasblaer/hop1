@@ -21,6 +21,7 @@ import {
   ensureAdmin,
   ensureCompany,
   ensureItemId,
+  ensureItemIdsForSale,
   ensureItemTypeId,
   ensureSaleId,
   getSecretAssert,
@@ -33,6 +34,8 @@ import {
   uploadUserImageHandler,
 } from "./images.js";
 import { createItemType, deleteItemTypeById, getItemTypeById, getItemTypesByCId, updateItemTypeById } from "./itemType.js";
+import { createSale } from "../lib/db.js";
+import { createSaleHandler, deleteSaleHandler, getSaleById, listSalesInCompany } from "./sales.js";
 
 export const router = express.Router();
 
@@ -157,6 +160,13 @@ router.get(
 router.post("/item/:itemTypeId", authenticateJWT, ensureItemTypeId, addItem);
 router.patch("/item/:itemId", authenticateJWT, ensureItemId, editItem);
 router.delete("/item/:itemId", authenticateJWT, ensureItemId, removeItem);
+
+/* Sales */
+router.get("/sales", authenticateJWT, listSalesInCompany);
+router.post("/sales", authenticateJWT, ensureItemIdsForSale, createSaleHandler);
+router.get("/sale/:saleId", authenticateJWT, ensureSaleId, getSaleById);
+router.delete("/sale/:saleId", authenticateJWT, ensureSaleId, deleteSaleHandler);
+
 
 /* Images */
 router.post(

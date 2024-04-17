@@ -50,8 +50,18 @@ export async function getSale(id: string): Promise<sale | null> {
   return sale ?? null;
 }
 
-export async function createSale(data: Prisma.saleUncheckedCreateInput): Promise<sale | null> {
-  const sale = prisma.sale.create({ data });
+export async function createSale(companyId: number, items: number[]): Promise<sale | null> {
+  const sale = prisma.sale.create({
+    data: {
+      companyId,
+      items: {
+        connect: items.map(item => ({ id: item }))
+      }
+    },
+    include: {
+      items: true,
+    }
+  });
   return sale ?? null;
 }
 

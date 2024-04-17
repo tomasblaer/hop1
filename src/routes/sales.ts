@@ -1,17 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { createSale, deleteSale, getSale, getSales, updateSale } from "../lib/db";
-import { sale } from "@prisma/client";
+import { createSale, deleteSale, getSale, getSales, updateSale } from "../lib/db.js";
+import { item, sale } from "@prisma/client";
+import { getCompanyId } from "../lib/util.js";
 
 export async function listSalesInCompany(
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void | Response> {
-    const companyId = req.params.companyId;
-    const sales = await getSales(parseInt(companyId));
+    const companyId = getCompanyId(req);
+    const sales = await getSales(companyId);
   
     if (!sales) {
-      return next(new Error("No saless found"));
+      return next(new Error("No sales found"));
     }
   
     return res.json(sales);
@@ -37,11 +38,11 @@ export async function createSaleHandler(
     res: Response,
     next: NextFunction
   ): Promise<void | Response> {
-    const {companyId, items } = req.body;
+    const {companyId, items }: { companyId: number, items: number[] } = req.body;
   
     let saleCreated: sale | null = null;
     try {
-      saleCreated = await createSale({ items, companyId});
+      saleCreated = await createSale(companyId, items);
     } catch (err) {
       return next(err);
     }

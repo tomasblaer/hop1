@@ -72,3 +72,20 @@ export async function ensureItemId(req: Request, res: Response, next: NextFuncti
   }
   next();
 }
+
+export async function ensureItemIdsForSale(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as user;
+  const items = await Promise.all(req.body.items.map((itemId: number) => getItem(itemId)));
+
+  if (items.some((item) => !item)) {
+    return res.status(404).json({ message: "Item not found" });
+  }
+  if (items.some((item) => item.saleId)) {
+    return res.status(400).json({ message: "Item is already sold" });
+  }
+  // If item does not belong to user company
+  if (items.some((item) => item.companyId !== user.companyId)) {
+    return res.status(401).json({ message: "Unauthorized, companyId does not match" });
+  }
+  next();
+}
