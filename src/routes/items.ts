@@ -5,6 +5,7 @@ import {
   insertItem,
   updateItem,
   deleteItem,
+  getItemsInType,
 } from "../lib/db.js";
 import { item } from "@prisma/client";
 import { validateItem } from "../lib/validation.js";
@@ -95,6 +96,21 @@ export async function listItemsInCompany(
   const companyId = getCompanyId(req);
   const item = await getItemsInCompany(companyId);
 
+
+  if (!item) {
+    return next(new Error("No items found"));
+  }
+
+  return res.json(item);
+}
+
+export async function listItemsInType(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response> {
+  const itemTypeId = req.params.itemTypeId;
+  const item = await getItemsInType(itemTypeId);
 
   if (!item) {
     return next(new Error("No items found"));
