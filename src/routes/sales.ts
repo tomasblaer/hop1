@@ -38,7 +38,8 @@ export async function createSaleHandler(
     res: Response,
     next: NextFunction
   ): Promise<void | Response> {
-    const {companyId, items }: { companyId: number, items: number[] } = req.body;
+    const { items } = req.body;
+    const companyId = getCompanyId(req);
   
     let saleCreated: sale | null = null;
     try {
