@@ -33,7 +33,7 @@ export async function generateCompanyInitialUser(company: company): Promise<user
   const { id: companyId, name: companyName } = company;
   const password = generate({ length: 16, numbers: true });
   const hashed = await bcrypt.hash(password, 10);
-  const user = insertUser({ companyId, username: companyName, password: hashed, isCompanyAdmin: true });
+  const user = insertUser({ companyId, username: companyName.replace(' ',''), password: hashed, isCompanyAdmin: true });
   if (!user) {
     throw new Error("User not created");
   }
