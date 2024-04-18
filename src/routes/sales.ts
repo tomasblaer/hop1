@@ -29,6 +29,8 @@ export async function getSaleById(
     if (!sale) {
       return next(new Error("No sale found"));
     }
+
+    return res.json(sale);
   
 }
 
