@@ -142,7 +142,9 @@ export async function getItemsInType(itemTypeId: string): Promise<item[] | null>
 
 export async function getItemsInSale(saleId: string): Promise<item[] | null> {
   const items = await prisma.item.findMany({
-    where: { saleId: saleId }
+    relationLoadStrategy: 'join',
+    where: { saleId: saleId },
+    include: { itemType: true }
   });
   return items ?? null;
 }
