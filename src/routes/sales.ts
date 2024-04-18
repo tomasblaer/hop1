@@ -23,11 +23,11 @@ export async function getSaleById(
     res: Response,
     next: NextFunction
   ): Promise<void | Response> {
-    const id = req.params.id;
+    const id = req.params.saleId;
     const sale = await getSale(id);
   
     if (!sale) {
-      return next(new Error("No company found"));
+      return next(new Error("No sale found"));
     }
   
 }
